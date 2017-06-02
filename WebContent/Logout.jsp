@@ -7,5 +7,5 @@
 
 <script>
 	alert("로그아웃 성공");
-	location.href="generic.html";
+	location.href="index.html";
 </script>

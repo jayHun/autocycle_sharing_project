@@ -38,7 +38,7 @@
 				<nav>
 					<ul>
 						<li><a href="index.jsp">Home</a></li>
-						<li><a href="generic.html" class="active">Generic</a></li>
+						<li><a href="index.html" class="active">Generic</a></li>
 						<li><a href="elements.html">Elements</a></li>
 					</ul>
 				</nav>

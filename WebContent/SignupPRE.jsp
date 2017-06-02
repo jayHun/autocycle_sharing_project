@@ -17,7 +17,7 @@
 	if(signupdao.insertMember(signupdto)>0){
 		out.print("<script>");
 		out.print("alert('가입을 축하드립니다.');");
-		out.print("location.href='generic.html';");
+		out.print("location.href='index.html';");
 		out.print("</script>");
 	}else{
 		out.print("<script>");
