@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR" %>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8" %>
 <%@ page import="signup.SignupDTO" %>
 <%@ page import="signup.SignupDAO" %>
 <% request.setCharacterEncoding("utf-8"); %>
@@ -16,12 +16,12 @@
 <%
 	if(signupdao.insertMember(signupdto)>0){
 		out.print("<script>");
-		out.print("alert('°¡ÀÔÀ» ÃàÇÏµå¸³´Ï´Ù.');");
+		out.print("alert('ê°€ì…ì„ ì¶•í•˜ë“œë¦½ë‹ˆë‹¤.');");
 		out.print("location.href='index.html';");
 		out.print("</script>");
 	}else{
 		out.print("<script>");
-		out.print("alert('È¸¿ø°¡ÀÔÀÌ Á¤»óÀûÀ¸·Î ¿Ï·áµÇÁö ¾Ê¾Ò½À´Ï´Ù.');");
+		out.print("alert('íšŒì›ê°€ì…ì´ ì •ìƒì ìœ¼ë¡œ ì™„ë£Œë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.');");
 		out.print("history.back();");
 		out.print("</script>");
 	}

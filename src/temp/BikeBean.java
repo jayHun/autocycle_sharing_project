@@ -4,9 +4,9 @@ import java.util.ArrayList;
 public class BikeBean {
 	public BikeBean(){}
 	
-	private ArrayList<String> bikeId;
-	private ArrayList<String> latitude;
-	private ArrayList<String> longitude;
+	private ArrayList<String> bikeId = new ArrayList<String>();
+	private ArrayList<String> latitude = new ArrayList<String>();
+	private ArrayList<String> longitude = new ArrayList<String>();
 	private String curLocationLat;
 	private String curLocationLng;
 	
@@ -33,13 +33,13 @@ public class BikeBean {
 	public void setCurLocationLat(String lat){
 		this.curLocationLat= lat;
 	}
-	public void setBikeId(int index,String bikeId){
+	public void setBikeId(int index, String bikeId){
 		this.bikeId.add(index, bikeId);
 	}
 	public void setLatitude(int index, String latitude){
 		this.latitude.add(index, latitude);
 	}
-	public void setLongitude(int index,String longitude){
-		this.latitude.add(index,longitude);
+	public void setLongitude(int index, String longitude){
+		this.longitude.add(index, longitude);
 	}
 }

@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <% 
 	out.print("<script>");
-	out.print("alert('·Î±×ÀÎ ½ÇÆĞ. ¾ÆÀÌµğ¿Í ºñ¹Ğ¹øÈ£¸¦ È®ÀÎÇÏ¼¼¿ä.');");
+	out.print("alert('ë¡œê·¸ì¸ ì‹¤íŒ¨. ì•„ì´ë””ì™€ ë¹„ë°€ë²ˆí˜¸ë¥¼ í™•ì¸í•˜ì„¸ìš”.');");
 	out.print("history.back();");
 	out.print("</script>");
 %>

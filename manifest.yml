@@ -1,0 +1,8 @@
+---
+applications:
+- name: wscproject2017
+  memory: 512M
+  host: wscproject2017
+  domain: au-syd.mybluemix.net
+  services:
+  - wscMySQL

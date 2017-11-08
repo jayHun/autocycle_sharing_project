@@ -1,52 +1,56 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <%@ page import="java.io.*" %>
+<%@ page import="temp.BikeBean, temp.LogBean" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-		<title>½ºÄíÅÍ½¦¾î¸µ</title>
+		<title>ìŠ¤ì¿ í„°ì‰ì–´ë§</title>
 		<% 	
-			 String id = (String)session.getAttribute("ID");
-	 		session.setAttribute("ID", id);
+			 String id = (String)session.getAttribute("LOGIN_USER");
+	 		 session.setAttribute("LOGIN_USER", id);
+	 		 
+	 		 LogBean logbean =  (LogBean) session.getAttribute("USER_LOG");
+	 		 session.setAttribute("USER_LOG", logbean);
 		%>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/overlay.css" />
 	</head>
 	<body>
 
-		<!-- ¸Ş´º¹Ù ÆíÁı -->
+		<!-- ë©”ë‰´ë°” í¸ì§‘ -->
 			<section id="sidebar">
 				<div class="inner">
 					<center>
-					<%
-        				if(id!=null){
-        					out.println(id+"´Ô");
-        			%>
+				<%
+					if(id!=null){out.println(id+"ë‹˜");
+				%>
         			</center><br/>
-        				<button onclick="location='Logout.jsp'">·Î±×¾Æ¿ô</button><br/><br/>
-        			<%}%>
+        				<button onclick="location='Logout.jsp'">ë¡œê·¸ì•„ì›ƒ</button><br/><br/>
+        			<%} %>
 					<nav>
 						<ul>
-						<%  if(id==null){
-								out.println("<!--");
-						%>
-							<li><a href="#intro">¸ŞÀÎÆäÀÌÁö</a></li>
-						<%	
-							out.println("-->");
-							}else{
-								out.println("<li><a href="+"#intro"+">¸ŞÀÎÆäÀÌÁö</a></li>");
-							}
-						%>
-							<li><a href="#one">¸¶ÀÌÆäÀÌÁö</a></li>
-							<li><a href="#two">ºÎ°¡ÆäÀÌÁö</a></li>
 						<%
 							if(id==null){
 						%>
-							<li><a href="#three">È¸¿ø°¡ÀÔ</a></li>
+							<li><a href="index.html">ë¡œê·¸ì¸</a></li>
+						<%}%>
 						<%
-							}
+							if(id!=null){
 						%>
+							<li><a href="#intro">ì£¼ë³€ ìŠ¤ì¿ í„° ê²€ìƒ‰/ì´ìš©</a></li>
+						<%}%>
+							<li><a href="#one">ë§ˆì´í˜ì´ì§€</a></li>
+							<li><a href="#two">ëˆ„ì  ê¸°ë¡ ì¡°íšŒ</a></li>
+						<%
+							if(id==null){
+						%>
+							<li><a href="#three">íšŒì›ê°€ì…</a></li>
+						<%}%>
 						</ul>
 					</nav>
 				</div>
@@ -55,25 +59,224 @@
 		<!-- Wrapper -->
 			<div id="wrapper">
 
-				<!-- Áöµµ ³Ö´Â°÷!!!! -->
-					<section id="intro" class="wrapper style1 fullscreen fade-up">
+					<!-- ì§€ë„ ë„£ëŠ”ê³³!!!! -->
+					<%
+						if(id!=null){
+					%>
+						<section id="intro" class="wrapper style1 fullscreen fade-up">
 						<div class="inner">
-							<h1>Áöµµ</h1>
-							<p>ÀÌ°÷¿¡ Áöµµ¸¦ ³ÖÀ¸¸é µÉ°Å°°½À´Ï´Ù</p>
+							<h3>available bikes arround your location</h3>
+    							<div id="map" style="width:80%; height:600px;"></div><br>&nbsp;&nbsp;
+    							<p><button onclick="showMarkers()">ì£¼ë³€ ìŠ¤ì¿ í„° ë³´ê¸°</button></p>
+							<script type="text/javascript" src="//apis.daum.net/maps/maps3.js?apikey=010e366715aca0ac1bd32a2bd5e0193f"></script>
+							<script>
+								var mapContainer = document.getElementById('map'), // ì§€ë„ë¥¼ í‘œì‹œí•  div
+    							mapOption = {
+    	    						center: new daum.maps.LatLng(37.486653, 126.801815), // ì§€ë„ì˜ ì¤‘ì‹¬ì¢Œí‘œ
+	        						level: 2 // ì§€ë„ì˜ í™•ëŒ€ ë ˆë²¨
+    							};
+
+								var marker = new daum.maps.Marker({
+									title: 'í˜„ì¬ ìœ„ì¹˜',
+									position: new daum.maps.LatLng(37.486653, 126.801815)
+								});
+
+	    						var map = new daum.maps.Map(mapContainer, mapOption); // ì§€ë„ë¥¼ ìƒì„±í•©ë‹ˆë‹¤
+	    						map.addOverlayMapTypeId(daum.maps.MapTypeId.TRAFFIC);
+	    						marker.setMap(map);
+	    						// ë§ˆì»¤ë¥¼ í‘œì‹œí•  ìœ„ì¹˜ì™€ ë‚´ìš©ì„ ê°€ì§€ê³  ìˆëŠ” ê°ì²´ ë°°ì—´ì…ë‹ˆë‹¤ 
+	    						
+	    						// beanì— ì €ì¥ëœ ìŠ¤ì¿ í„° ì •ë³´ ê°€ì ¸ì™€ì„œ ë¦¬ìŠ¤íŠ¸ë¡œ ë¿Œë¦¬ê¸° (ë°°ì—´ë¦¬ìŠ¤íŠ¸ë¡œ ì €ì¥ë˜ì—ˆê¸° ë•Œë¬¸ì— ì¶œë ¥ì€ ì¸ë±ìŠ¤ ì—­ìˆœìœ¼ë¡œ)
+	    						var list1= [];
+	    						var list2= [];
+	    						var list3= [];
+	    						
+	    						<c:forEach items="${BIKE_INFO.bikeId}" var="item1">
+	    							list1.push("${item1}");
+	    						</c:forEach>
+	    						<c:forEach items="${BIKE_INFO.latitude}" var="item2">
+	    							list2.push("${item2}");
+	    						</c:forEach>
+	    						<c:forEach items="${BIKE_INFO.longitude}" var="item3">
+	    							list3.push("${item3}");
+	    						</c:forEach>
+	    						
+	    						var positions = [{
+	        						content: '<div class="wrap">' +
+	            						'    <div class="info">' +
+	            						'        <div class="title"><font color="black" size="2.75em">' +
+	            						'            ìŠ¤ì¿ í„°1</font>' +
+	            						'            <div class="close" title="ë‹«ê¸°"></div>' +
+	            						'        </div>' +
+	            						'        <div class="body">' +
+	            						'            <div class="img">' +
+	            						'                <img src="http://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
+	            						'           </div>' +
+	            						'            <div style="position: relative; margin: 5px 0 0 90px; height: 85px;" class="desc">' +
+	            						'                <div class="ellipsis"><font color="black">ì”ì—¬ ê¸°ë¦„ : 1L</font></div>' +
+	            						'                <div class="jibun ellipsis">ì´ë™ ê°€ëŠ¥ ê±°ë¦¬ : 1.4km</div>' +
+	            						'                <div><form action="start" method="post"><input type="hidden" name="BIKEID" value="'+ list1[3] +'"/><input type="hidden" name="LATITUDE" value="'+ list2[3] +'"/><input type="hidden" name="LONGITUDE" value="'+ list3[3] +'"><input style="margin-top: 0.25em; background-color: #cccccc; width: 6.0em; height: 35px; line-height: 2.5em; border: solid 1px; border-color: #ffffff ; border-radius: 3em; color: #ffffff; cursor: pointer; font-size: 1.1em; font-weight: bold; letter-spacing: 0.35em; outline: 0; padding: 0em 0.3em 0.2em 0.5em; position: relative; text-align: center; text-decoration: none; white-space: nowrap" type="submit" value="ì¶œë°œ"></form></div>' + //StartRidingServletìœ¼ë¡œ ì¢Œí‘œê°’ ë„˜ê²¨ì•¼í•¨ (formíƒœê·¸ì‚¬ìš©)
+	            						'            </div>' +
+	            						'        </div>' +
+	            						'    </div>' +
+	        						    '</div>',
+	        						latlng: new daum.maps.LatLng(parseFloat(list2[3]), parseFloat(list3[3]))
+	    						}, {
+	        						content: '<div class="wrap">' +
+	            						'    <div class="info">' +
+	            						'        <div class="title"><font color="black" size="2.75em">' +
+	            						'            ìŠ¤ì¿ í„°2</font>' +
+	            						'            <div class="close" title="ë‹«ê¸°"></div>' +
+	            						'        </div>' +
+	            						'        <div class="body">' +
+	            						'            <div class="img">' +
+	            						'                <img src="http://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
+	            						'           </div>' +
+	            						'            <div style="position: relative; margin: 5px 0 0 90px; height: 85px;" class="desc">' +
+	            						'                <div class="ellipsis"><font color="black">ì”ì—¬ ê¸°ë¦„ : 1.5L</font></div>' +
+	            						'                <div class="jibun ellipsis">ì´ë™ ê°€ëŠ¥ ê±°ë¦¬ : 1.0km</div>' +
+	            						'                <div><form action="start" method="post"><input type="hidden" name="BIKEID" value="'+ list1[2] +'"><input type="hidden" name="LATITUDE" value="'+ list2[2] +'"><input type="hidden" name="LONGITUDE" value="'+ list3[2] +'"><input style="margin-top: 0.25em; background-color: #cccccc; width: 6.0em; height: 35px; line-height: 2.5em; border: solid 1px; border-color: #ffffff ; border-radius: 3em; color: #ffffff; cursor: pointer; font-size: 1.1em; font-weight: bold; letter-spacing: 0.35em; outline: 0; padding: 0em 0.3em 0.2em 0.5em; position: relative; text-align: center; text-decoration: none; white-space: nowrap" type="submit" value="ì¶œë°œ"></form></div>' +
+	            						'            </div>' +
+	            						'        </div>' +
+	            						'    </div>' +
+	            						'</div>',
+	        						latlng: new daum.maps.LatLng(parseFloat(list2[2]), parseFloat(list3[2]))
+	    						}, {
+	        						content: '<div class="wrap">' +
+	            						'    <div class="info">' +
+	            						'        <div class="title"><font color="black" size="2.75em">' +
+	            						'            ìŠ¤ì¿ í„°3</font>' +
+	            						'            <div class="close" title="ë‹«ê¸°"></div>' +
+	            						'        </div>' +
+	            						'        <div class="body">' +
+	            						'            <div class="img">' +
+	            						'                <img src="http://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
+	            						'           </div>' +
+	            						'            <div style="position: relative; margin: 5px 0 0 90px; height: 85px;" class="desc">' +
+	            						'                <div class="ellipsis"><font color="black">ì”ì—¬ ê¸°ë¦„ : 2L</font></div>' +
+	            						'                <div class="jibun ellipsis">ì´ë™ ê°€ëŠ¥ ê±°ë¦¬ : 1.4km</div>' +
+	            						'                <div><form action="start" method="post"><input type="hidden" name="BIKEID" value="'+ list1[1] +'"><input type="hidden" name="LATITUDE" value="'+ list2[1] +'"><input type="hidden" name="LONGITUDE" value="'+ list3[1] +'"><input style="margin-top: 0.25em; background-color: #cccccc; width: 6.0em; height: 35px; line-height: 2.5em; border: solid 1px; border-color: #ffffff ; border-radius: 3em; color: #ffffff; cursor: pointer; font-size: 1.1em; font-weight: bold; letter-spacing: 0.35em; outline: 0; padding: 0em 0.3em 0.2em 0.5em; position: relative; text-align: center; text-decoration: none; white-space: nowrap" type="submit" value="ì¶œë°œ"></form></div>' +
+	            						'            </div>' +
+	            						'        </div>' +
+	            						'    </div>' +
+	            						'</div>',
+	        						latlng: new daum.maps.LatLng(parseFloat(list2[1]), parseFloat(list3[1]))
+	    						}, {
+	        						content: '<div class="wrap">' +
+	            						'    <div class="info">' +
+	            						'        <div class="title"><font color="black" size="2.75em">' +
+	            						'            ìŠ¤ì¿ í„°4</font>' +
+	            						'            <div class="close" title="ë‹«ê¸°"></div>' +
+	            						'        </div>' +
+	            						'        <div class="body">' +
+	            						'            <div class="img">' +
+	            						'                <img src="http://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
+	            						'           </div>' +
+	            						'            <div style="position: relative; margin: 5px 0 0 90px; height: 85px;" class="desc">' +
+	            						'                <div class="ellipsis"><font color="black">ì”ì—¬ ê¸°ë¦„ : 3L</font></div>' +
+	            						'                <div class="jibun ellipsis">ì´ë™ ê°€ëŠ¥ ê±°ë¦¬ : 3km</div>' +
+	            						'                <div><form action="start" method="post"><input type="hidden" name="BIKEID" value="'+ list1[0] +'"><input type="hidden" name="LATITUDE" value="'+ list2[0] +'"><input type="hidden" name="LONGITUDE" value="'+ list3[0] +'"><input style="margin-top: 0.25em; background-color: #cccccc; width: 6.0em; height: 35px; line-height: 2.5em; border: solid 1px; border-color: #ffffff ; border-radius: 3em; color: #ffffff; cursor: pointer; font-size: 1.1em; font-weight: bold; letter-spacing: 0.35em; outline: 0; padding: 0em 0.3em 0.2em 0.5em; position: relative; text-align: center; text-decoration: none; white-space: nowrap" type="submit" value="ì¶œë°œ"></form></div>' +
+	            						'            </div>' +
+	            						'        </div>' +
+	            						'    </div>' +
+	            						'</div>',	
+	        						latlng: new daum.maps.LatLng(parseFloat(list2[0]), parseFloat(list3[0]))
+	    						}];
+
+	    						// ìŠ¤ì¿ í„° í‘œì‹œ ë§ˆì»¤ì´ë¯¸ì§€
+	    						var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+	    
+	    						// ì˜¤ë²„ë ˆì´ë¥¼ ë‹´ëŠ” ë°°ì—´
+	    						var overlays = [];
+								var markers = [];
+
+							    // ë§µì˜ í™•ëŒ€ìˆ˜ì¤€ì´ ë³€ê²½ë˜ê±°ë‚˜ ìœ„ì¹˜ì´ë™ ë˜ì—ˆì„ë•Œ ì»¤ìŠ¤í…€ ì˜¤ë²„ë ˆì´ ì‚­ì œ
+	    						daum.maps.event.addListener(map, 'idle', function() {
+	        						closeOverlays();
+	    						});
+
+	    						// ì˜¤ë²„ë ˆì´ë¥¼ ëª¨ë‘ ë‹«ëŠ” í•¨ìˆ˜
+	    						function closeOverlays() {
+	    							for (var i = 0; i < overlays.length; i++) {
+	    								overlays[i].setMap(null);
+	    							}
+	    						}
+	
+	    						// ë§ˆì»¤ ìƒì„±
+	    						for (var i = 0; i < positions.length; i++) {
+	    							createMarkers(positions[i]);
+	    						}
+	    
+								// ë§ˆì»¤ ìƒì„± í•¨ìˆ˜
+	    						function createMarkers(info){
+	    							var imageSize = new daum.maps.Size(24, 35);
+	    							var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize);
+	    	
+	    							// ë§ˆì»¤ë¥¼ ìƒì„±
+	        						var marker = new daum.maps.Marker({
+	            						map: map, // ë§ˆì»¤ë¥¼ í‘œì‹œí•  ì§€ë„
+	            						position: info.latlng, // ë§ˆì»¤ì˜ ìœ„ì¹˜
+	            						image : markerImage
+	        						});
+	    							markers.push(marker);
+	    							marker.setVisible(false);
+	    						}
+	    
+	    						// ì˜¤ë²„ë ˆì´ ìƒì„±
+	    						for (var i = 0; i < positions.length; i++) {
+	    							createOverlay(positions[i], markers[i]);
+	    						}
+	    
+	    						// ë§ˆì»¤ì™€ ì˜¤ë²„ë ˆì´ë¥¼ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
+	    						function createOverlay(info, markinfo) {
+	
+	        						var overlayDiv = document.createElement('div');
+	        						overlayDiv.innerHTML = info.content;
+
+	        						// ë§ˆì»¤ ìœ„ì— ì»¤ìŠ¤í…€ì˜¤ë²„ë ˆì´ë¥¼ í‘œì‹œí•©ë‹ˆë‹¤
+	        						var overlay = new daum.maps.CustomOverlay({
+	            						content: overlayDiv, // ì»¤ìŠ¤í…€ì˜¤ë²„ë ˆì´ì— í‘œì‹œí•  ë‚´ìš©
+	            						position: markinfo.getPosition(),
+	            						zIndex: 3
+	        						});
+	        
+	        						// ë§ˆì»¤ë¥¼ í´ë¦­í–ˆì„ ë•Œ ì»¤ìŠ¤í…€ ì˜¤ë²„ë ˆì´ í‘œì‹œ
+	        						daum.maps.event.addListener(markinfo, 'click', function() {
+	            						overlay.setMap(map);
+	        						});
+
+	        						// ì˜¤ë²„ë ˆì´ elementì—ì„œ closeë²„íŠ¼ì„ í´ë¦­í•˜ë©´ ë‹«íˆê²Œ ë˜ëŠ” ì´ë²¤íŠ¸ë¥¼ ë“±ë¡
+	        						var close = overlayDiv.getElementsByClassName('close')[0];
+	        						close.onclick= function() {
+	        							overlay.setMap(null);	
+	        						};
+
+	        						overlays.push(overlay);
+	    						}
+	    
+	    						// ì£¼ë³€ ìŠ¤ì¿ í„° ì°¾ê¸° ë²„íŠ¼ í´ë¦­ì‹œ ë³´ì´ê²Œ í•˜ëŠ” ì´ë²¤íŠ¸í•¨ìˆ˜
+	    						function showMarkers(){
+	    							for(var i=0; i<markers.length; i++){
+	    								markers[i].setVisible(true);
+	    								markers[i].getVisible();
+	    							}
+	    						}	    
+    						</script>							
+							
 							
 						</div>
-					</section>
-
-				<!--¸¶ÀÌÆäÀÌÁö ½ºÅ²-->
+						</section>
+					<%} %>
+				<!--ë§ˆì´í˜ì´ì§€ ìŠ¤í‚¨-->
 					<section id="one" class="wrapper style2 spotlights">
 						<section>
 							<a href="#" class="image"><img src="images/pic01.jpg" alt="" data-position="center center" /></a>
 							<div class="content">
 								<div class="inner">
-									<h2>¿ä±İÁ¤»ê</h2>
-									<p>»ç¿ëÇß´ø ¿ÀÅä¹ÙÀÌ ¿ä±İÀ» È®ÀÎÇÏ¼¼¿ä</p>
+									<h2>ìš”ê¸ˆì •ì‚°</h2>
+									<p>ì‚¬ìš©í–ˆë˜ ì˜¤í† ë°”ì´ ìš”ê¸ˆì„ í™•ì¸í•˜ì„¸ìš”</p>
 									<ul class="actions">
-										<li><a href="#" class="button">º¸·¯°¡±â</a></li>
+										<li><a href="#" class="button">ë³´ëŸ¬ê°€ê¸°</a></li>
 									</ul>
 								</div>
 							</div>
@@ -83,8 +286,8 @@
 							<a href="#" class="image"><img src="images/pic02.jpg" alt="" data-position="top center" /></a>
 							<div class="content">
 								<div class="inner">
-									<h2>È¸¿ø Å»ÅğÇÏ±â</h2>
-									<p>¡Ø È¸¿ø Å»Åğ½Ã ¸ğµç Á¤º¸°¡ »èÁ¦µË´Ï´Ù </p>
+									<h2>íšŒì› íƒˆí‡´í•˜ê¸°</h2>
+									<p>â€» íšŒì› íƒˆí‡´ì‹œ ëª¨ë“  ì •ë³´ê°€ ì‚­ì œë©ë‹ˆë‹¤ </p>
 									<form action="DeluserPRE.jsp" method="post" name="myform" onSubmit="return checkpassIt()">
 										<div class="field half first">
 											<label for="id">ID</label>
@@ -95,7 +298,7 @@
 											<input type="password" name="PASSWD" id="passwd" />
 										</div>
 										<ul class="actions">
-											<li><a href="" class="button submit">È¸¿øÅ»Åğ</a></li>
+											<li><a href="" class="button submit">íšŒì›íƒˆí‡´</a></li>
 										</ul>
 									</form>
 								</div>
@@ -105,49 +308,55 @@
 						
 					</section>
 					
-				<!-- ºÎ°¡ÆäÀÌÁö1 -->
+				<!-- ë¶€ê°€í˜ì´ì§€1 -->
 					<section id="two" class="wrapper style3 fade-up">
 						<div class="inner">
-							<h2>ºÎ°¡ÆäÀÌÁö</h2>
-							<p>´õ ÇÊ¿äÇÑ±â´ÉÀÌ »ı±â¸é ¿©±â¿¡ Ãß°¡ÇÏ¸é µÉ°Å°°½À´Ï´Ù</p>
+							<h2>ë¶€ê°€í˜ì´ì§€</h2>
+							<p>ì´ìš© ë¡œê·¸</p>
 							<div class="features">
 								<section>
 									<span class="icon major fa-code"></span>
-									<h3>ºÎ°¡±â´É1</h3>
-									<p>ÀÔ·ÂÇÏ¼¼¿ä</p>
+									<h3>ëˆ„ì  ì‚¬ìš© íšŸìˆ˜</h3>
+									<p>${USER_LOG.getCounter()} ë²ˆ</p>
 								</section>
 								<section>
 									<span class="icon major fa-lock"></span>
-									<h3>ºÎ°¡±â´É2</h3>
-									<p>ÀÔ·ÂÇÏ¼¼¿ä</p>
+									<h3>ëˆ„ì  ì´ìš© ì‹œê°„</h3>
+									<p>${USER_LOG.getSum()} ì´ˆ</p>
 								</section>
 								<section>
 									<span class="icon major fa-cog"></span>
-									<h3>ºÎ°¡±â´É3</h3>
-									<p>ÀÔ·ÂÇÏ¼¼¿ä</p>
+									<h3>ê³µìœ í•˜ê¸°</h3>
+									<ul class="icons">
+										<li><a href="#" class="fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="fa-facebook"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="fa-github"><span class="label">GitHub</span></a></li>
+										<li><a href="#" class="fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									</ul>
 								</section>
 								<section>
 									<span class="icon major fa-desktop"></span>
-									<h3>ºÎ°¡±â´É4</h3>
-									<p>ÀÔ·ÂÇÏ¼¼¿ä</p>
+									<h3>ë„ì›€ë§</h3>
+									<p>...</p>
 								</section>
 								
 							</div>
 							<ul class="actions">
-								<li><a href="#" class="button">¿©±â¸¦ ´©¸£¼¼¿ä</a></li>
+								<li><a href="#" class="button">í™•ì¸í•˜ê¸°</a></li>
 							</ul>
 						</div>
 					</section>
 			
 			
-			<!-- È¸¿ø°¡ÀÔ ÆäÀÌÁö -->
+			<!-- íšŒì›ê°€ì… í˜ì´ì§€ -->
 			<%	
 				if(id==null){
 			%>
 					<section id="three" class="wrapper style1 fade-up">
 						<div class="inner">
-							<h2>È¸¿ø°¡ÀÔ</h2>
-							<p>È¸¿øÁ¤º¸¸¦ ÀÔ·ÂÇÏ¼¼¿ä</p>
+							<h2>íšŒì›ê°€ì…</h2>
+							<p>íšŒì›ì •ë³´ë¥¼ ì…ë ¥í•˜ì„¸ìš”</p>
 							<div class="split style1">
 								<section>
 									<form method="post" action="SignupPRE.jsp" name="userinput" onSubmit="return checkIt()">
@@ -157,7 +366,7 @@
 										</div>
 										<div class="field half">
 											<label for="check">&nbsp;</label>
-											<input type="button" name="confirm_id" id="check" value="IDÁßº¹È®ÀÎ" onclick="openConfirmid(this.form)">
+											<input type="button" name="confirm_id" id="check" value="IDì¤‘ë³µí™•ì¸" onclick="openConfirmid(this.form)">
 										</div>
 										<div class="field half first">
 											<label for="passwd">PASSWD</label>
@@ -173,57 +382,40 @@
 										</div>
 										<div class="field half first">
 											<label for="hp">HP</label>
-											<input type="text" name="HP" id="hp" placeholder="- »©°í ÀÔ·Â"/>
+											<input type="text" name="HP" id="hp" placeholder="- ë¹¼ê³  ì…ë ¥"/>
 										</div>
 										<div class="field half">
 											<label for="birth">BIRTH</label>
-											<input type="text" name="BIRTH" id="birth" placeholder="ÁÖ¹Îµî·Ï¹øÈ£ ¾Õ 6±ÛÀÚ"/>
+											<input type="text" name="BIRTH" id="birth" placeholder="ì£¼ë¯¼ë“±ë¡ë²ˆí˜¸ ì• 6ê¸€ì"/>
 										</div>
 										<ul class="actions" align="right">
-											<li><a href="" class="button submit">È¸¿ø°¡ÀÔ</a></li>
-											<li><input type="reset" value="ÃÊ±âÈ­"></li>
+											<li><a href="" class="button submit">íšŒì›ê°€ì…</a></li>
+											<li><input type="reset" value="ì´ˆê¸°í™”"></li>
 										</ul>
 									</form>
 								</section>
 								<section>
 									<ul class="contact">
-										<li>
-											<h3>Address</h3>
-											<span>12345 Somewhere Road #654<br />
-											Nashville, TN 00000-0000<br />
-											USA</span>
-										</li>
-										<li>
-											<h3>Email</h3>
-											<a href="#">user@untitled.tld</a>
-										</li>
-										<li>
-											<h3>Phone</h3>
-											<span>(000) 000-0000</span>
-										</li>
-										<li>
-											<h3>Social</h3>
-											<ul class="icons">
-												<li><a href="#" class="fa-twitter"><span class="label">Twitter</span></a></li>
-												<li><a href="#" class="fa-facebook"><span class="label">Facebook</span></a></li>
-												<li><a href="#" class="fa-github"><span class="label">GitHub</span></a></li>
-												<li><a href="#" class="fa-instagram"><span class="label">Instagram</span></a></li>
-												<li><a href="#" class="fa-linkedin"><span class="label">LinkedIn</span></a></li>
-											</ul>
-										</li>
+									<h3>Social</h3>
+									<ul class="icons">
+										<li><a href="#" class="fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="fa-facebook"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="fa-github"><span class="label">GitHub</span></a></li>
+										<li><a href="#" class="fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									</ul>
 									</ul>
 								</section>
 							</div>
 						</div>
-					</section>
-			<%} %>
+					</section><%} %>
 			</div>
 		
 		<!-- Footer -->
 			<footer id="footer" class="wrapper style1-alt">
 				<div class="inner">
 					<ul class="menu">
-						<li>&copy; À¥¼­ºñ½ºÄÄÇ»ÆÃ 3Á¶ ÇÑÁ¤ÈÆ ÀÌ°­·Ä ÀÌ½ÂÇö</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+						<li>&copy; The Catholic University of Korea</li><li>CSIE WebService Computing TEAM3</li>
 					</ul>
 				</div>
 			</footer>
@@ -237,25 +429,25 @@
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
 			
-		<!--  ¾ÆÀÌµğ Áßº¹ Ã¼Å© ½ºÅ©¸³Æ® -->
+		<!--  ì•„ì´ë”” ì¤‘ë³µ ì²´í¬ ìŠ¤í¬ë¦½íŠ¸ -->
 			<script>
 				function checkIt()
 				{
 					var userinput = eval("document.userinput");
 		
 					if(!userinput.ID.value) {
-						alert("ID¸¦ ÀÔ·ÂÇÏ¼¼¿ä!")
+						alert("IDë¥¼ ì…ë ¥í•˜ì„¸ìš”!")
 						return false;
 					}
 		
 					if(!userinput.PASSWD.value) {
-						alert("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä!");
+						alert("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”!");
 						return false;
 					}
 		
 					if(userinput.PASSWD.value != 
 						document.userinput.PASSWD2.value){
-						alert("ºñ¹Ğ¹øÈ£¸¦ µ¿ÀÏÇÏ°Ô ÀÔ·ÂÇÏ¼¼¿ä!");
+						alert("ë¹„ë°€ë²ˆí˜¸ë¥¼ ë™ì¼í•˜ê²Œ ì…ë ¥í•˜ì„¸ìš”!");
 						return false;
 					}
 				}
@@ -263,7 +455,7 @@
 				function openConfirmid(userinput)
 				{
 					if(userinput.ID.value == ""){
-						alert("Áßº¹È®ÀÎ¿¡·¯: ¾ÆÀÌµğ¸¦ ÀÔ·ÂÇÏ¼¼¿ä");
+						alert("ì¤‘ë³µí™•ì¸ì—ëŸ¬: ì•„ì´ë””ë¥¼ ì…ë ¥í•˜ì„¸ìš”");
 						return;
 					}
 					url="confirmId.jsp?id=" + userinput.ID.value;
@@ -277,7 +469,7 @@
 	
 				function checkpassIt(){
 					if(!document.myform.passwd.value){
-						alert("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä!");
+						alert("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”!");
 						document.myform.passwd.focus();
 						return false;
 					}

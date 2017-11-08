@@ -21,7 +21,7 @@ public class SignupDAO {
 
 		try{
 			conn=dbconn.getConn();
-			sql = "INSERT INTO MEMBER(ID, PASSWD, NAME, HP, BIRTH) VALUES(?,?,?,?,?)";
+			sql = "insert into member(id, passwd, name, hp, birth) values(?,?,?,?,?)";
 			pstmt=conn.prepareStatement(sql);
 			
 			pstmt.setString(1, signupdto.getId());
@@ -70,7 +70,7 @@ public class SignupDAO {
 					pstmt = conn.prepareStatement("delete from member where id = ?");
 					
 					pstmt.setString(1, id);
-					pstmt.executeQuery();
+					pstmt.executeUpdate();
 					
 					x = 1;
 					if(pstmt != null) try{pstmt.close();} catch(SQLException ex){}
@@ -100,7 +100,7 @@ public class SignupDAO {
 		
 		try{
 			conn = dbconn.getConn();
-			sql = "select id from MEMBER where id = ?";
+			sql = "select id from member where id = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();

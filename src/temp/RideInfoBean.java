@@ -3,7 +3,9 @@ package temp;
 public class RideInfoBean {
 	//데이터 저장하려고만든 bean입니다
 	public RideInfoBean(){}
-	private String userId;
+	
+	public String userId;
+	private String bikeId;
 	private String startLocLat;
 	private String startLocLng;
 	private String endLocLat;
@@ -11,7 +13,22 @@ public class RideInfoBean {
 	private long startTime;
 	private long endTime;
 	private long usingTime;
+	private String distance;
+	private int price;
 	
+	
+	public void setBikeId(String bikeId){
+		this.bikeId= bikeId;
+	}
+	public String getBikeId(){
+		return this.bikeId;
+	}
+	public void setDistance(String distance){
+		this.distance=distance;
+	}
+	public String getDistance(){
+		return this.distance;
+	}
 	public void setUserId(String id){
 		this.userId= id;
 	}
@@ -59,5 +76,11 @@ public class RideInfoBean {
 	}
 	public String getEndLocLng(){
 		return this.endLocLng;
+	}
+	public long getPrice(){
+		return price;
+	}
+	public void setPrice(int price){
+		this.price=price;
 	}
 }
