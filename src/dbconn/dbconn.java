@@ -6,17 +6,17 @@ import java.sql.*;
 
 public class dbconn {
 
-   //1. µ¥ÀÌÅÍº£ÀÌ½º ¿¬°á °úÁ¤
+   //1. ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²° ê³¼ì •
    public static Connection getConn()
          throws ClassNotFoundException, SQLException {
 	  
-	  Connection conn = null; //Connection(µ¥ÀÌÅÍº£ÀÌ½º ¿¬°á) °´Ã¼ ÀúÀå¿ë º¯¼ö ¼±¾ğ
+	  Connection conn = null; //Connection(ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²°) ê°ì²´ ì €ì¥ìš© ë³€ìˆ˜ ì„ ì–¸
 	  System.setProperty("javax.net.ssl.trustStore","/home/project/truststore");
 	  System.setProperty("javax.net.ssl.trustStorePassword", "somepass");
 	  
-	  String user="admin";
-	  String password="CQJZHPHVUBTYNAID";
-	  String URL = "jdbc:mysql://sl-aus-syd-1-portal.3.dblayer.com:16065/compose";
+	  // String user="id";
+	  // String password="keyline";
+	  // String URL = "jdbc:mysql://sl-aus-syd-1-portal.3.dblayer.com:16065/compose";
 	  
       try{
          if (conn == null) {
